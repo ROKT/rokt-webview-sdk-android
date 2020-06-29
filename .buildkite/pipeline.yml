@@ -1,0 +1,4 @@
+steps:
+  - label: ":hammer: Building Project"
+    command: "./gradlew clean assembleDevelopmentDebug"
+    artifact_paths: "app/build/outputs/apk/development/debug/*.apk"
