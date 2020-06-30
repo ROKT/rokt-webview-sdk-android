@@ -1,0 +1,115 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "roktsdk:testDevDebugUnitTest")
+  end
+
+  desc "Build & Unit Test Android SDK for PR build"
+  lane :buildAndroidSdkForPR do
+    # Build android flavours and unit test
+    gradle(task: "assemble")
+  end
+
+  desc "Publish Example app to App Center"
+  lane :publishToAppCenter do
+    # Build release version of example app and publish to App center
+    gradle(task: "assembleMockRelease")
+    gradle(task: "assembleDevRelease")
+    # Upload mock example app to Microsoft AppCenter
+    appcenter_upload(
+      api_token: ENV['APPCENTER_API_TOKEN'],
+      owner_name: ENV['APPCENTER_APP_OWNER'],
+      app_name: "#{ENV['APPCENTER_APP_NAME']}-MOCK",
+      destinations: ENV['APPCENTER_APP_DESTINATION'],
+      file: "app/build/outputs/apk/mock/release/app-mock-release.apk",
+      release_notes: "Android Test app version #{ENV['BUILDKITE_BUILD_NUMBER']}.\nBranch: #{ENV['BUILDKITE_BRANCH']}\n#{ENV['BUILDKITE_MESSAGE']}",
+      notify_testers: true
+    )
+    # Upload dev example app to Microsoft AppCenter
+    appcenter_upload(
+      api_token: ENV['APPCENTER_API_TOKEN'],
+      owner_name: ENV['APPCENTER_APP_OWNER'],
+      app_name: "#{ENV['APPCENTER_APP_NAME']}-DEV",
+      destinations: ENV['APPCENTER_APP_DESTINATION'],
+      file: "app/build/outputs/apk/dev/release/app-dev-release.apk",
+      release_notes: "Android Test app version #{ENV['BUILDKITE_BUILD_NUMBER']}.\nBranch: #{ENV['BUILDKITE_BRANCH']}\n#{ENV['BUILDKITE_MESSAGE']}",
+      notify_testers: true
+    )
+  end
+
+  desc "Build, Unit Test Android SDK and UI test for release build"
+  lane :buildAndTestAndroidSdkForRelease do
+    # Build android flavours, unit test and execute UI tests in device farm
+    gradle(task: "assembleMock")
+    deviceFarmUITest
+  end
+
+  desc "Publish SDK to ALPHA maven repo"
+  lane :publishToS3Alpha do
+    gradle(task: "publishAlphaPublicationToMavenRepository")
+  end
+
+  desc "Publish SDK to PROD maven repo"
+  lane :publishToS3Prod do
+    gradle(task: "publishProdPublicationToMavenRepository")
+  end
+
+  desc "Run UI tests on AWS device farm(stage) and wait for the results"
+  lane :deviceFarmUITest do
+    ENV['AWS_ACCESS_KEY_ID']     = ENV['DEVICE_FARM_STAGE_ACCESS_KEY']
+    ENV['AWS_SECRET_ACCESS_KEY'] = ENV['DEVICE_FARM_STAGE_SECRET_KEY']
+    ENV['AWS_REGION']            = "us-west-2"
+
+    # Build Debug App + Instrumentation Apk
+    gradle(task: 'assembleMockDebug')
+    gradle(task: 'app:assembleMockDebugAndroidTest')
+
+    # RUN tests on AWS Device Farm
+    aws_device_farm(
+      binary_path:          "app/build/outputs/apk/mock/debug/app-mock-debug.apk",
+      test_binary_path:     "app/build/outputs/apk/androidTest/mock/debug/app-mock-debug-androidTest.apk",
+      name:                 ENV['DEVICE_FARM_STAGE_PROJECT_NAME'],
+      device_pool:          ENV['DEVICE_FARM_STAGE_DEVICE_POOL'],
+      print_web_url_of_run: true,
+      filter:               "com.rokt.roktsampleapp"
+    )
+  end
+
+  desc "Run End to End tests on AWS device farm(stage) and wait for the results"
+  lane :deviceFarmE2ETest do
+    ENV['AWS_ACCESS_KEY_ID']     = ENV['DEVICE_FARM_STAGE_ACCESS_KEY']
+    ENV['AWS_SECRET_ACCESS_KEY'] = ENV['DEVICE_FARM_STAGE_SECRET_KEY']
+    ENV['AWS_REGION']            = "us-west-2"
+
+    # Build Debug App + Instrumentation Apk
+    gradle(task: 'assembleDevDebug')
+    gradle(task: 'app:assembleDevDebugAndroidTest')
+
+    # RUN tests on AWS Device Farm
+    aws_device_farm(
+      binary_path:          "app/build/outputs/apk/dev/debug/app-dev-debug.apk",
+      test_binary_path:     "app/build/outputs/apk/androidTest/dev/debug/app-dev-debug-androidTest.apk",
+      name:                 ENV['DEVICE_FARM_STAGE_PROJECT_NAME'],
+      device_pool:          ENV['DEVICE_FARM_STAGE_E2E_DEVICE_POOL'],
+      print_web_url_of_run: true,
+      filter:               "com.rokt.e2etest"
+    )
+  end
+end

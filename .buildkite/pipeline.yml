@@ -1,4 +1,26 @@
 steps:
-  - label: ":hammer: Building Project"
-    command: "./gradlew clean assembleDevelopmentDebug"
-    artifact_paths: "app/build/outputs/apk/development/debug/*.apk"
+  - name: ':hammer: Build Android RoktWebView SDK'
+    commands:
+      - bundle install
+      - bundle exec fastlane buildAndroidSdkForPR
+    artifact_paths:
+      - "app/**/*.apk"
+      - "roktsdk/**/*.aar"
+    plugins:
+      - docker-compose#v3.0.0:
+          config: ./docker-compose.yml
+          run: build_android
+      - seek-oss/aws-sm#v2.0.0:
+          env:
+            STORE_PASSWORD:
+              secret-id: 'stage-android-sdk-buildkite'
+              json-key: '.STORE_PASSWORD'
+            KEY_ALIAS:
+              secret-id: 'stage-android-sdk-buildkite'
+              json-key: '.KEY_ALIAS'
+            KEY_PASSWORD:
+              secret-id: 'stage-android-sdk-buildkite'
+              json-key: '.KEY_PASSWORD'
+    agents:
+      queue: 'stage-us-west-2-default'
+    timeout_in_minutes: 25
