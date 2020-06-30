@@ -38,5 +38,3 @@ steps:
         agents:
           queue: 'eng-default'
         timeout_in_minutes: 25
-
-      - wait
