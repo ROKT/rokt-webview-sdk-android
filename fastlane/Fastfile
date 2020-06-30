@@ -18,47 +18,14 @@ default_platform(:android)
 platform :android do
   desc "Runs all the tests"
   lane :test do
-    gradle(task: "roktsdk:testDevDebugUnitTest")
+    gradle(task: "roktwebviewsdk:testDebugUnitTest")
   end
 
   desc "Build & Unit Test Android SDK for PR build"
   lane :buildAndroidSdkForPR do
     # Build android flavours and unit test
     gradle(task: "assemble")
-  end
-
-  desc "Publish Example app to App Center"
-  lane :publishToAppCenter do
-    # Build release version of example app and publish to App center
-    gradle(task: "assembleMockRelease")
-    gradle(task: "assembleDevRelease")
-    # Upload mock example app to Microsoft AppCenter
-    appcenter_upload(
-      api_token: ENV['APPCENTER_API_TOKEN'],
-      owner_name: ENV['APPCENTER_APP_OWNER'],
-      app_name: "#{ENV['APPCENTER_APP_NAME']}-MOCK",
-      destinations: ENV['APPCENTER_APP_DESTINATION'],
-      file: "app/build/outputs/apk/mock/release/app-mock-release.apk",
-      release_notes: "Android Test app version #{ENV['BUILDKITE_BUILD_NUMBER']}.\nBranch: #{ENV['BUILDKITE_BRANCH']}\n#{ENV['BUILDKITE_MESSAGE']}",
-      notify_testers: true
-    )
-    # Upload dev example app to Microsoft AppCenter
-    appcenter_upload(
-      api_token: ENV['APPCENTER_API_TOKEN'],
-      owner_name: ENV['APPCENTER_APP_OWNER'],
-      app_name: "#{ENV['APPCENTER_APP_NAME']}-DEV",
-      destinations: ENV['APPCENTER_APP_DESTINATION'],
-      file: "app/build/outputs/apk/dev/release/app-dev-release.apk",
-      release_notes: "Android Test app version #{ENV['BUILDKITE_BUILD_NUMBER']}.\nBranch: #{ENV['BUILDKITE_BRANCH']}\n#{ENV['BUILDKITE_MESSAGE']}",
-      notify_testers: true
-    )
-  end
-
-  desc "Build, Unit Test Android SDK and UI test for release build"
-  lane :buildAndTestAndroidSdkForRelease do
-    # Build android flavours, unit test and execute UI tests in device farm
-    gradle(task: "assembleMock")
-    deviceFarmUITest
+    gradle(task: "ktlintCheck")
   end
 
   desc "Publish SDK to ALPHA maven repo"
