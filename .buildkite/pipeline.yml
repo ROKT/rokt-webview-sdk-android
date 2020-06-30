@@ -25,16 +25,16 @@ steps:
       queue: 'stage-us-west-2-default'
     timeout_in_minutes: 25
 
-      - name: ':hammer: Test Android RoktWebView SDK'
-        commands:
-          - bundle install
-          - bundle exec fastlane test
-        artifact_paths:
-          - "roktwebviewsdk/build/test-results/**/*.xml"
-        plugins:
-          - docker-compose#v3.0.0:
-              config: ./docker-compose.yml
-              run: build_android
-        agents:
-          queue: 'eng-default'
-        timeout_in_minutes: 25
+  - name: ':hammer: Test Android RoktWebView SDK'
+    commands:
+      - bundle install
+      - bundle exec fastlane test
+    artifact_paths:
+      - "roktwebviewsdk/build/test-results/**/*.xml"
+    plugins:
+      - docker-compose#v3.0.0:
+          config: ./docker-compose.yml
+          run: build_android
+    agents:
+      queue: 'eng-default'
+    timeout_in_minutes: 25
