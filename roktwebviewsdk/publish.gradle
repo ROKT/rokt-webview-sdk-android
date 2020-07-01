@@ -15,7 +15,7 @@ afterEvaluate {
             alpha(MavenPublication) {
                 groupId "com.rokt"
                 artifactId "roktwebviewsdk"
-                version versions.sdkVersionName + versions.alphaVersionSuffix
+                version versions.sdkVersionName + alphaVersionCode
                 artifact sourcesJar
             }
 
