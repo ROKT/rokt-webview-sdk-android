@@ -1,0 +1,39 @@
+apply plugin: 'maven-publish'
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    archiveVersion.set(versions.sdkVersionName)
+    from "./doc"
+    include("**/*.kt")
+}
+
+def s3url = "s3://rokt-eng-us-west-2-mobile-sdk-artefacts/"
+
+afterEvaluate {
+    publishing {
+        publications {
+            alpha(MavenPublication) {
+                groupId "com.rokt"
+                artifactId "roktwebviewsdk"
+                version versions.sdkVersionName + versions.alphaVersionSuffix
+                artifact sourcesJar
+            }
+
+            prod(MavenPublication) {
+                groupId "com.rokt"
+                artifactId "roktwebviewsdk"
+                version versions.sdkVersionName
+                artifact sourcesJar
+            }
+        }
+        repositories {
+            maven {
+                url s3url
+                credentials(AwsCredentials) {
+                    accessKey = System.env.UPLOAD_AWS_ACCESS_KEY_ID
+                    secretKey = System.env.UPLOAD_AWS_SECRET_ACCESS_KEY
+                }
+            }
+        }
+    }
+}

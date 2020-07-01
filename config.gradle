@@ -1,5 +1,6 @@
 // Read the Example app's version code from CI system's environment variable
 def appVersionCode = (System.getenv("BUILDKITE_BUILD_NUMBER") ?: "1").toInteger()
+def alphaVersionSuffix = "-alpha." + System.getenv("BUILDKITE_BUILD_NUMBER")
 
 ext.versions = [
         // Core SDK versions

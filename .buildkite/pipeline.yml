@@ -38,3 +38,38 @@ steps:
     agents:
       queue: 'eng-default'
     timeout_in_minutes: 25
+
+  - block: ":whale: Release to S3 alpha"
+    prompt: "Confirm releasing this version to S3 alpha?"
+
+  - name: ':rocket: Publish SDK to alpha maven repo'
+    commands:
+      - bundle install
+      - bundle exec fastlane publishToS3Alpha
+    artifact_paths:
+      - "app/**/*.apk"
+      - "roktwebviewsdk/**/*.aar"
+    plugins:
+      - docker-compose#v3.0.0:
+          config: ./docker-compose.yml
+          run: build_android
+      - seek-oss/aws-sm#v2.0.0:
+          env:
+            STORE_PASSWORD:
+              secret-id: 'stage-android-sdk-buildkite'
+              json-key: '.STORE_PASSWORD'
+            KEY_ALIAS:
+              secret-id: 'stage-android-sdk-buildkite'
+              json-key: '.KEY_ALIAS'
+            KEY_PASSWORD:
+              secret-id: 'stage-android-sdk-buildkite'
+              json-key: '.KEY_PASSWORD'
+            UPLOAD_AWS_ACCESS_KEY_ID:
+              secret-id: 'stage-android-sdk-buildkite'
+              json-key: '.UPLOAD_AWS_ACCESS_KEY_ID'
+            UPLOAD_AWS_SECRET_ACCESS_KEY:
+              secret-id: 'stage-android-sdk-buildkite'
+              json-key: '.UPLOAD_AWS_SECRET_ACCESS_KEY'
+    agents:
+      queue: 'stage-us-west-2-default'
+    timeout_in_minutes: 25

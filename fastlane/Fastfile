@@ -24,6 +24,8 @@ platform :android do
   desc "Build & Unit Test Android SDK for PR build"
   lane :buildAndroidSdkForPR do
     # Build android flavours and unit test
+    gradle(task: "roktwebviewsdk:assemble")
+    gradle(task: "roktwebviewsdk:ktlintCheck")
     gradle(task: "assemble")
     gradle(task: "ktlintCheck")
   end
@@ -45,38 +47,17 @@ platform :android do
     ENV['AWS_REGION']            = "us-west-2"
 
     # Build Debug App + Instrumentation Apk
-    gradle(task: 'assembleMockDebug')
-    gradle(task: 'app:assembleMockDebugAndroidTest')
+    gradle(task: 'app:assemble')
+    gradle(task: 'roktwebviewsdk:assembleAndroidTest')
 
     # RUN tests on AWS Device Farm
     aws_device_farm(
-      binary_path:          "app/build/outputs/apk/mock/debug/app-mock-debug.apk",
-      test_binary_path:     "app/build/outputs/apk/androidTest/mock/debug/app-mock-debug-androidTest.apk",
+      binary_path:          "app/build/outputs/apk/debug/app-debug.apk",
+      test_binary_path:     "roktwebviewsdk/build/outputs/apk/androidTest/debug/roktwebviewsdk-debug-androidTest.apk",
       name:                 ENV['DEVICE_FARM_STAGE_PROJECT_NAME'],
       device_pool:          ENV['DEVICE_FARM_STAGE_DEVICE_POOL'],
       print_web_url_of_run: true,
-      filter:               "com.rokt.roktsampleapp"
-    )
-  end
-
-  desc "Run End to End tests on AWS device farm(stage) and wait for the results"
-  lane :deviceFarmE2ETest do
-    ENV['AWS_ACCESS_KEY_ID']     = ENV['DEVICE_FARM_STAGE_ACCESS_KEY']
-    ENV['AWS_SECRET_ACCESS_KEY'] = ENV['DEVICE_FARM_STAGE_SECRET_KEY']
-    ENV['AWS_REGION']            = "us-west-2"
-
-    # Build Debug App + Instrumentation Apk
-    gradle(task: 'assembleDevDebug')
-    gradle(task: 'app:assembleDevDebugAndroidTest')
-
-    # RUN tests on AWS Device Farm
-    aws_device_farm(
-      binary_path:          "app/build/outputs/apk/dev/debug/app-dev-debug.apk",
-      test_binary_path:     "app/build/outputs/apk/androidTest/dev/debug/app-dev-debug-androidTest.apk",
-      name:                 ENV['DEVICE_FARM_STAGE_PROJECT_NAME'],
-      device_pool:          ENV['DEVICE_FARM_STAGE_E2E_DEVICE_POOL'],
-      print_web_url_of_run: true,
-      filter:               "com.rokt.e2etest"
+      filter:               "rokt.com.roktwebviewsample"
     )
   end
 end
