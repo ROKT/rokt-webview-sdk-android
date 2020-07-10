@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F1F1F1"
     android:padding="5sp"
-    tools:context=".MainActivity">
+    tools:context="com.rokt.roktwebviewsample.MainActivity">
 
     <TextView
         android:id="@+id/textLabel1"
@@ -46,8 +46,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textLabel1" />
 
-
-    <rokt.com.roktwebviewsdk.RoktWebView
+    <com.rokt.roktwebviewsdk.RoktWebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -56,5 +55,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextUrl" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
