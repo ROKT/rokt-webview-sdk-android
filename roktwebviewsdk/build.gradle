@@ -34,4 +34,6 @@ dependencies {
     testImplementation libraries.junit
     androidTestImplementation libraries.espressoCore
     androidTestImplementation libraries.extJUnit
+    implementation 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+    implementation 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
 }
