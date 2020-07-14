@@ -1,7 +1,7 @@
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 
-version = versions.sdkVersionName
+version = versions.sdkVersionName + '-alpha'
 group = pub.groupId
 
 task androidSourcesJar(type: Jar) {
