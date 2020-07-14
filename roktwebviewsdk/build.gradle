@@ -2,11 +2,13 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-apply from: './publish.gradle'
-
 android {
     compileSdkVersion versions.compileSdk
     buildToolsVersion versions.buildToolsVersion
+
+    lintOptions {
+        abortOnError false
+    }
 
     defaultConfig {
         minSdkVersion versions.minSdk
@@ -35,3 +37,5 @@ dependencies {
     androidTestImplementation libraries.espressoCore
     androidTestImplementation libraries.extJUnit
 }
+
+apply from: 'publish.gradle'

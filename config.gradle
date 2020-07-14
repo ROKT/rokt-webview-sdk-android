@@ -1,6 +1,5 @@
-// Read the Example app's version code from CI system's environment variable
 def appVersionCode = (System.getenv("BUILDKITE_BUILD_NUMBER") ?: "1").toInteger()
-ext.alphaVersionCode = "-alpha." + appVersionCode
+ext.alphaVersionCode = "-alpha" + appVersionCode
 
 ext.versions = [
         // Core SDK versions
@@ -39,4 +38,20 @@ ext.libraries = [
         espressoCore      : "androidx.test.espresso:espresso-core:${versions.espresso}",
         extJUnit          : "androidx.test.ext:junit:${versions.extJUnit}"
 
+]
+
+ext.pub = [
+        bintrayRepo       : 'maven',
+        bintrayName       : 'com.rokt.roktwebviewsdk',
+        groupId           : 'com.rokt',
+        libraryName       : 'roktwebviewsdk',
+        artifactId        : 'roktwebviewsdk',
+        libraryDescription: 'RoktWebViewSDK',
+        siteUrl           : 'https://github.com/ROKT/rokt-webview-sdk-android',
+        gitUrl            : 'https://github.com/ROKT/rokt-webview-sdk-android.git',
+        developerId       : 'nativeappsdev',
+        developerName     : 'NativeAppsDev',
+        developerEmail    : 'nativeappsdev@rokt.com',
+        licenseName       : 'MIT',
+        allLicenses       : ["MIT"]
 ]

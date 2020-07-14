@@ -1,39 +1,57 @@
+apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 
-task sourcesJar(type: Jar) {
+version = versions.sdkVersionName
+group = pub.groupId
+
+task androidSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
     archiveClassifier.set('sources')
-    archiveVersion.set(versions.sdkVersionName)
-    from "./doc"
-    include("**/*.kt")
 }
 
-def s3url = "s3://rokt-eng-us-west-2-mobile-sdk-artefacts/"
+publishing {
+    publications {
+        Production(MavenPublication) {
+            artifact androidSourcesJar
+            artifact("$buildDir/outputs/aar/roktwebviewsdk-release.aar")
+            groupId this.group
+            artifactId pub.artifactId
+            version this.version
 
-afterEvaluate {
-    publishing {
-        publications {
-            alpha(MavenPublication) {
-                groupId "com.rokt"
-                artifactId "roktwebviewsdk"
-                version versions.sdkVersionName + alphaVersionCode
-                artifact sourcesJar
-            }
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
 
-            prod(MavenPublication) {
-                groupId "com.rokt"
-                artifactId "roktwebviewsdk"
-                version versions.sdkVersionName
-                artifact sourcesJar
-            }
-        }
-        repositories {
-            maven {
-                url s3url
-                credentials(AwsCredentials) {
-                    accessKey = System.env.UPLOAD_AWS_ACCESS_KEY_ID
-                    secretKey = System.env.UPLOAD_AWS_SECRET_ACCESS_KEY
+                // Iterate over the implementation dependencies (we don't want the test ones), adding a <dependency> node for each
+                configurations.implementation.allDependencies.each {
+                    // Ensure dependencies such as fileTree are not included in the pom.
+                    if (it.name != 'unspecified') {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
                 }
             }
+        }
+    }
+}
+
+// Bintray
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['Production']
+    configurations = ['archives']
+    publish = true
+    pkg {
+        repo =  pub.bintrayRepo
+        name = pub.bintrayName
+        desc = pub.libraryDescription
+        websiteUrl = pub.siteUrl
+        vcsUrl = pub.gitUrl
+        licenses = pub.allLicenses
+        version {
+            desc = pub.libraryDescription
         }
     }
 }
