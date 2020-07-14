@@ -30,14 +30,12 @@ platform :android do
     gradle(task: "ktlintCheck")
   end
 
-  desc "Publish SDK to ALPHA maven repo"
-  lane :publishToS3Alpha do
-    gradle(task: "publishAlphaPublicationToMavenRepository")
-  end
-
   desc "Publish SDK to PROD maven repo"
-  lane :publishToS3Prod do
-    gradle(task: "publishProdPublicationToMavenRepository")
+  lane :publishToBintray do
+    gradle(task: "roktwebviewsdk:clean")
+    gradle(task: "roktwebviewsdk:build")
+    gradle(task: "roktwebviewsdk:install")
+    gradle(task: "roktwebviewsdk:bintrayUpload")
   end
 
   desc "Run UI tests on AWS device farm(stage) and wait for the results"
