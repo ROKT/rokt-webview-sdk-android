@@ -1,5 +1,4 @@
 def appVersionCode = (System.getenv("BUILDKITE_BUILD_NUMBER") ?: "1").toInteger()
-ext.alphaVersionCode = "-alpha" + appVersionCode
 
 ext.versions = [
         // Core SDK versions
