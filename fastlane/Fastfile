@@ -34,7 +34,6 @@ platform :android do
   lane :publishToBintray do
     gradle(task: "roktwebviewsdk:clean")
     gradle(task: "roktwebviewsdk:build")
-    gradle(task: "roktwebviewsdk:install")
     gradle(task: "roktwebviewsdk:bintrayUpload")
   end
 
