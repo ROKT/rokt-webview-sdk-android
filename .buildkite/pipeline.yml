@@ -13,13 +13,13 @@ steps:
       - seek-oss/aws-sm#v2.0.0:
           env:
             STORE_PASSWORD:
-              secret-id: 'stage-android-sdk-buildkite'
+              secret-id: 'stage-android-webviewsdk-buildkite'
               json-key: '.STORE_PASSWORD'
             KEY_ALIAS:
-              secret-id: 'stage-android-sdk-buildkite'
+              secret-id: 'stage-android-webviewsdk-buildkite'
               json-key: '.KEY_ALIAS'
             KEY_PASSWORD:
-              secret-id: 'stage-android-sdk-buildkite'
+              secret-id: 'stage-android-webviewsdk-buildkite'
               json-key: '.KEY_PASSWORD'
     agents:
       queue: 'stage-us-west-2-default'
@@ -56,14 +56,20 @@ steps:
       - seek-oss/aws-sm#v2.0.0:
           env:
             STORE_PASSWORD:
-              secret-id: 'stage-android-sdk-buildkite'
+              secret-id: 'stage-android-webviewsdk-buildkite'
               json-key: '.STORE_PASSWORD'
             KEY_ALIAS:
-              secret-id: 'stage-android-sdk-buildkite'
+              secret-id: 'stage-android-webviewsdk-buildkite'
               json-key: '.KEY_ALIAS'
             KEY_PASSWORD:
-              secret-id: 'stage-android-sdk-buildkite'
+              secret-id: 'stage-android-webviewsdk-buildkite'
               json-key: '.KEY_PASSWORD'
+            BINTRAY_USER:
+              secret-id: 'stage-android-webviewsdk-buildkite'
+              json-key: '.BINTRAY_USER'
+            BINTRAY_KEY:
+              secret-id: 'stage-android-webviewsdk-buildkite'
+              json-key: '.BINTRAY_KEY'
     agents:
       queue: 'stage-us-west-2-default'
     timeout_in_minutes: 25
