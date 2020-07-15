@@ -6,10 +6,6 @@ android {
     compileSdkVersion versions.compileSdk
     buildToolsVersion versions.buildToolsVersion
 
-    lintOptions {
-        abortOnError false
-    }
-
     defaultConfig {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
