@@ -2,7 +2,7 @@ steps:
   - name: ':speech_balloon: Notify Maven repository deployment start'
     commands:
        - set -x
-       - curl -v -X POST -H \"Content-Type: application/json\" ${CHAT_WEBHOOK}&threadKey=${BUILDKITE_COMMIT} -F "data={\"text\":\"This is a message\"}
+       - curl -v -X POST "${CHAT_WEBHOOK}&threadKey=${BUILDKITE_COMMIT}" -F "data={\"text\":\"This is a message\"}
     plugins:
       - seek-oss/aws-sm#v2.0.0:
           env:
