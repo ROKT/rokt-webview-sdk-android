@@ -1,6 +1,6 @@
 steps:
   - name: ':hammer: Build and UI Test'
-    depends_on: 'unit-tests'
+    depends_on: 'key-unit-tests'
     commands:
       - bundle install
       - bundle exec fastlane deviceFarmUITest
@@ -39,9 +39,9 @@ steps:
     timeout_in_minutes: 60
   - input: ':whale: Release to Maven'
     prompt: Confirm releasing this version to Maven?
-    key: block-release-maven
+    key: 'block-release-maven'
   - name: ':speech_balloon: Notify Maven repository deployment start'
-    depends_on: block-release-maven
+    depends_on: 'block-release-maven'
     command:
       - curl -v -X POST "$${CHAT_WEBHOOK}&threadKey=${BUILDKITE_COMMIT}" --data "{\"text\":\"Started deploying Android RoktWebViewSDK to Maven-Prod repository\"}"  --header Content-Type:application/json
     plugins:
