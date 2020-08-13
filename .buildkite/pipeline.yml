@@ -53,8 +53,9 @@ steps:
     prompt: Confirm releasing this version to Maven?
     key: block-release-maven
   - name: ':speech_balloon: Notify Maven repository deployment start'
-    command:
-      - curl -v -X POST "$${CHAT_WEBHOOK}&threadKey=${BUILDKITE_COMMIT}" --data "{\"text\":\"Started deploying Android RoktWebViewSDK to Maven repository\"}"  --header "Content-Type: application/json"
+    commands:
+      - set -x
+      - curl -v -X POST "$${CHAT_WEBHOOK}&threadKey=${BUILDKITE_COMMIT}" --data "{\"text\":\"This is a message\"}"  --header "Content-Type: application/json"
     plugins:
       - seek-oss/aws-sm#v2.0.0:
           env:
