@@ -1,38 +1,98 @@
-- name: ':hammer: Build and UI Test'
-  depends_on: 'unit-tests'
-  commands:
-    - bundle install
-    - bundle exec fastlane deviceFarmUITest
-  artifact_paths:
-    - "app/**/*.apk"
-    - "roktsdk/**/*.aar"
-  plugins:
-    - docker-compose#v3.0.0:
-        config: ./docker-compose.yml
-        run: build_android
-    - seek-oss/aws-sm#v2.0.0:
-        env:
-          STORE_PASSWORD:
-            secret-id: 'stage-android-webviewsdk-buildkite'
-            json-key: '.STORE_PASSWORD'
-          KEY_ALIAS:
-            secret-id: 'stage-android-webviewsdk-buildkite'
-            json-key: '.KEY_ALIAS'
-          KEY_PASSWORD:
-            secret-id: 'stage-android-webviewsdk-buildkite'
-            json-key: '.KEY_PASSWORD'
-          DEVICE_FARM_STAGE_ACCESS_KEY:
-            secret-id: 'stage-android-webviewsdk-buildkite'
-            json-key: '.DEVICE_FARM_STAGE_ACCESS_KEY'
-          DEVICE_FARM_STAGE_DEVICE_POOL:
-            secret-id: 'stage-android-webviewsdk-buildkite'
-            json-key: '.DEVICE_FARM_STAGE_DEVICE_POOL'
-          DEVICE_FARM_STAGE_PROJECT_NAME:
-            secret-id: 'stage-android-webviewsdk-buildkite'
-            json-key: '.DEVICE_FARM_STAGE_PROJECT_NAME'
-          DEVICE_FARM_STAGE_SECRET_KEY:
-            secret-id: 'stage-android-webviewsdk-buildkite'
-            json-key: '.DEVICE_FARM_STAGE_SECRET_KEY'
-  agents:
-    queue: 'stage-us-west-2-default'
-  timeout_in_minutes: 60
+steps:
+  - name: ':hammer: Build and UI Test'
+    depends_on: 'unit-tests'
+    commands:
+      - bundle install
+      - bundle exec fastlane deviceFarmUITest
+    artifact_paths:
+      - "app/**/*.apk"
+      - "roktsdk/**/*.aar"
+    plugins:
+      - docker-compose#v3.0.0:
+          config: ./docker-compose.yml
+          run: build_android
+      - seek-oss/aws-sm#v2.0.0:
+          env:
+            STORE_PASSWORD:
+              secret-id: 'stage-android-webviewsdk-buildkite'
+              json-key: '.STORE_PASSWORD'
+            KEY_ALIAS:
+              secret-id: 'stage-android-webviewsdk-buildkite'
+              json-key: '.KEY_ALIAS'
+            KEY_PASSWORD:
+              secret-id: 'stage-android-webviewsdk-buildkite'
+              json-key: '.KEY_PASSWORD'
+            DEVICE_FARM_STAGE_ACCESS_KEY:
+              secret-id: 'stage-android-webviewsdk-buildkite'
+              json-key: '.DEVICE_FARM_STAGE_ACCESS_KEY'
+            DEVICE_FARM_STAGE_DEVICE_POOL:
+              secret-id: 'stage-android-webviewsdk-buildkite'
+              json-key: '.DEVICE_FARM_STAGE_DEVICE_POOL'
+            DEVICE_FARM_STAGE_PROJECT_NAME:
+              secret-id: 'stage-android-webviewsdk-buildkite'
+              json-key: '.DEVICE_FARM_STAGE_PROJECT_NAME'
+            DEVICE_FARM_STAGE_SECRET_KEY:
+              secret-id: 'stage-android-webviewsdk-buildkite'
+              json-key: '.DEVICE_FARM_STAGE_SECRET_KEY'
+    agents:
+      queue: 'stage-us-west-2-default'
+    timeout_in_minutes: 60
+  - input: ':whale: Release to Maven'
+    prompt: Confirm releasing this version to Maven?
+    key: block-release-maven
+  - name: ':speech_balloon: Notify Maven repository deployment start'
+    depends_on: block-release-maven
+    command:
+      - curl -v -X POST "$${CHAT_WEBHOOK}&threadKey=${BUILDKITE_COMMIT}" --data "{\"text\":\"Started deploying Android RoktWebViewSDK to Maven-Prod repository\"}"  --header Content-Type:application/json
+    plugins:
+      - seek-oss/aws-sm#v2.0.0:
+          env:
+            CHAT_WEBHOOK:
+              secret-id: stage-android-webviewsdk-buildkite
+              json-key: .CHAT_WEBHOOK
+    agents:
+      queue: stage-us-west-2-default
+  - wait
+  - name: ':rocket: Publish RoktWebView SDK to maven'
+    commands:
+      - bundle install
+      - bundle exec fastlane publishToBintray
+    artifact_paths:
+      - app/**/*.apk
+      - roktwebviewsdk/**/*.aar
+    plugins:
+      - 'docker-compose#v3.0.0':
+          config: ./docker-compose.yml
+          run: build_android
+      - 'seek-oss/aws-sm#v2.0.0':
+          env:
+            STORE_PASSWORD:
+              secret-id: stage-android-webviewsdk-buildkite
+              json-key: .STORE_PASSWORD
+            KEY_ALIAS:
+              secret-id: stage-android-webviewsdk-buildkite
+              json-key: .KEY_ALIAS
+            KEY_PASSWORD:
+              secret-id: stage-android-webviewsdk-buildkite
+              json-key: .KEY_PASSWORD
+            BINTRAY_USER:
+              secret-id: stage-android-webviewsdk-buildkite
+              json-key: .BINTRAY_USER
+            BINTRAY_KEY:
+              secret-id: stage-android-webviewsdk-buildkite
+              json-key: .BINTRAY_KEY
+    agents:
+      queue: stage-us-west-2-default
+    timeout_in_minutes: 25
+  - wait
+  - name: ':speech_balloon: Notify Maven repository deployment complete'
+    command:
+      - curl -v -X POST "$${CHAT_WEBHOOK}&threadKey=${BUILDKITE_COMMIT}" --data "{\"text\":\"Finished deploying Android RoktWebViewSDK to Maven-Prod repository\"}"  --header Content-Type:application/json
+    plugins:
+      - seek-oss/aws-sm#v2.0.0:
+          env:
+            CHAT_WEBHOOK:
+              secret-id: stage-android-webviewsdk-buildkite
+              json-key: .CHAT_WEBHOOK
+    agents:
+      queue: stage-us-west-2-default
