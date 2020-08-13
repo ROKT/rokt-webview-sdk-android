@@ -5,7 +5,7 @@ steps:
        - echo $${CHAT_WEBHOOK}
        - CHAT_WEBHOOK1=$${CHAT_WEBHOOK}
        - echo ${CHAT_WEBHOOK1}
-       - "curl -v -X POST -H \"Content-Type: application/json\" --data \"{\"text\": \"This is a message\"}\" ${CHAT_WEBHOOK1}&threadKey=${BUILDKITE_COMMIT}"
+       - "CHAT_WEBHOOK1=$${CHAT_WEBHOOK} && echo $CHAT_WEBHOOK1 && curl -v -X POST -H \"Content-Type: application/json\" --data \"{\"text\": \"This is a message\"}\" ${CHAT_WEBHOOK1}&threadKey=${BUILDKITE_COMMIT}"
     plugins:
       - seek-oss/aws-sm#v2.0.0:
           env:
