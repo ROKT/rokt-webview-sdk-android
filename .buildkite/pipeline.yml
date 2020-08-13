@@ -53,6 +53,7 @@ steps:
     prompt: Confirm releasing this version to Maven?
     key: block-release-maven
   - name: ':speech_balloon: Notify Maven repository deployment start'
+    depends_on: block-release-maven
     command:
       - curl -v -X POST "$${CHAT_WEBHOOK}&threadKey=${BUILDKITE_COMMIT}" --data "{\"text\":\"Started deploying Android RoktWebViewSDK to Maven repository\"}"  --header Content-Type:application/json
     plugins:
@@ -63,9 +64,8 @@ steps:
               json-key: .CHAT_WEBHOOK
     agents:
       queue: stage-us-west-2-default
-
+  - wait
   - name: ':rocket: Publish RoktWebView SDK to maven'
-    depends_on: block-release-maven
     commands:
       - bundle install
       - bundle exec fastlane publishToBintray
