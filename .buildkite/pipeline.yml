@@ -25,6 +25,7 @@ steps:
       queue: stage-us-west-2-default
     timeout_in_minutes: 25
   - name: ':hammer: Test Android RoktWebView SDK'
+    key: 'key-unit-tests'
     commands:
       - bundle install
       - bundle exec fastlane test
