@@ -1,8 +1,17 @@
 ## RoktWebViewSDK Android
 
-The RoktWebView SDK for Android is is custom WebView that extends [android.webkit.WebView](https://developer.android.com/reference/kotlin/android/webkit/WebView). 
+The RoktWebView SDK for Android is is custom WebView that extends [android.webkit.WebView](https://developer.android.com/reference/kotlin/android/webkit/WebView). This WebView adds a JS interface once its initalised, allowing calls to RoktWebViewSDK.open(url) to open in an external browser.
 
-This WebView does 3 things. Appends RoktWebView to the user agent string, enables javascript and adds the RoktWebView Javascript Interface for capturing RoktWebViewSDK.open() methods.
+The RoktWebView SDK for Android does 3 things. 
+1. Appends RoktWebViewSDK to the user agent string 
+2. Enables Javascript
+3. Adds the RoktWebView Javascript Interface for capturing RoktWebViewSDK.open() methods
+
+
+## Demo
+
+![Demo](/assets/demo.gif)
+
 
 ## Instructions
 
