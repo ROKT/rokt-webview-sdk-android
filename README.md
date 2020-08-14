@@ -42,13 +42,13 @@ Or to add it programmatically in your onCreate(), use similar logic to the follo
 
 **Kotlin**
 ```
-val myWebView = WebView(activityContext)
+val myWebView = RoktWebView(activityContext)
 setContentView(myWebView)
 ```
 
 **Java**
 ```
-WebView myWebView = new WebView(activityContext);
+WebView myWebView = new RoktWebView(activityContext);
 setContentView(myWebView);
 ```
 ### Step 3: Load a web page
@@ -56,15 +56,15 @@ To load a web page in the RoktWebView, use loadUrl(). For example:
 
 **Kotlin**
 ```
-val myWebView: WebView = findViewById(R.id.webview)
-myWebView.loadUrl("http://www.example.com")
+val myWebView: RoktWebView = findViewById(R.id.webview)
+myWebView.loadUrl("https://www.rokt.com")
 ```
 
 **Java**
 ```
-WebView myWebView = (WebView) findViewById(R.id.webview);
-myWebView.loadUrl("http://www.example.com");
+WebView myWebView = (RoktWebView) findViewById(R.id.webview);
+myWebView.loadUrl("https://www.rokt.com");
 ```
 
 ### License
-Please see [LICENSE](/LICENSE)
+Please see [LICENSE](/LICENSE.md)
