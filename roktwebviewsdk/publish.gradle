@@ -1,4 +1,3 @@
-apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 
 version = versions.sdkVersionName + versionSuffix()
@@ -32,26 +31,6 @@ publishing {
                     }
                 }
             }
-        }
-    }
-}
-
-// Bintray
-bintray {
-    user = System.env.BINTRAY_USER
-    key = System.env.BINTRAY_KEY
-    publications = ['Production']
-    configurations = ['archives']
-    publish = true
-    pkg {
-        repo =  pub.bintrayRepo
-        name = pub.bintrayName
-        desc = pub.libraryDescription
-        websiteUrl = pub.siteUrl
-        vcsUrl = pub.gitUrl
-        licenses = pub.allLicenses
-        version {
-            desc = pub.libraryDescription
         }
     }
 }
