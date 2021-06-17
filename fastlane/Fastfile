@@ -30,13 +30,6 @@ platform :android do
     gradle(task: "ktlintCheck")
   end
 
-  desc "Publish SDK to PROD maven repo"
-  lane :publishToBintray do
-    gradle(task: "roktwebviewsdk:clean")
-    gradle(task: "roktwebviewsdk:build")
-    gradle(task: "roktwebviewsdk:bintrayUpload")
-  end
-
   desc "Run UI tests on AWS device farm(stage) and wait for the results"
     lane :deviceFarmUITest do
       ENV['AWS_ACCESS_KEY_ID']     = ENV['DEVICE_FARM_STAGE_ACCESS_KEY']

@@ -9,12 +9,13 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
 
+        maven { url "https://jitpack.io" }
+
     }
     dependencies {
         classpath "com.android.tools.build:gradle:${versions.gradleBuildTool}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
         classpath "org.jlleitschuh.gradle:ktlint-gradle:${versions.ktlint}"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
     }
 }
 
@@ -22,6 +23,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://jitpack.io" }
     }
 }
 
