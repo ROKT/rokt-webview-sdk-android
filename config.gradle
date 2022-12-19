@@ -42,8 +42,6 @@ ext.libraries = [
 ]
 
 ext.pub = [
-        bintrayRepo       : 'maven',
-        bintrayName       : 'com.rokt.roktwebviewsdk',
         groupId           : 'com.rokt',
         libraryName       : 'roktwebviewsdk',
         artifactId        : 'roktwebviewsdk',
