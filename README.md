@@ -1,11 +1,10 @@
 ## RoktWebViewSDK Android
 
+**This project is no longer maintained**
+--
+
 The RoktWebView SDK for Android is a custom WebView that opens links in an external browser instead of in the same WebView.
 
-## Resident Experts
-
-- Danial Motahari - danial.motahari@rokt.com
-- Sahil Suri - sahil.suri@rokt.com
 
 | Environment | Build |
 | ----------- | :----- |

@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion versions.compileSdk
-    buildToolsVersion versions.buildToolsVersion
 
     defaultConfig {
         applicationId "com.rokt.roktwebviewsample"
