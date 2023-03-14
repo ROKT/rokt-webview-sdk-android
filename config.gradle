@@ -12,8 +12,8 @@ ext.versions = [
         buildToolsVersion : "29.0.3",
 
         // Gradle plugins
-        gradleBuildTool   : '3.6.3',
-        kotlin            : '1.3.72',
+        gradleBuildTool   : '7.3.1',
+        kotlin            : '1.7.20',
         ktlint            : '8.2.0',
 
         // AndroidX libraries
@@ -23,8 +23,8 @@ ext.versions = [
         androidXExtensions: '1.2.0',
 
         // Test libraries
-        junit             : '4.13',
-        espresso          : '3.2.0',
+        junit             : '4.13.2',
+        espresso          : '3.3.0',
         extJUnit          : '1.1.1'
 ]
 
