@@ -1,14 +1,12 @@
-## RoktWebViewSDK Android
+# RoktWebViewSDK Android
 
-**This project is no longer maintained**
---
+**Please note:** This repository is currently unmaintained by a team of developers at Rokt. The repository is here and you can use it as an example only. However please be aware that we are not going to be updating issues or pull requests on this repository.
+
+An alternative approach to integration would be utilising the [Rokt Web SDK](https://docs.rokt.com/developers/integration-guides/web/overview) and utilising the launcher option [overrideLinkNavigation](https://docs.rokt.com/developers/integration-guides/web/library/integration-launcher-options/#override-link-navigation). 
+
+---
 
 The RoktWebView SDK for Android is a custom WebView that opens links in an external browser instead of in the same WebView.
-
-
-| Environment | Build |
-| ----------- | :----- |
-| release | [![Build status](https://badge.buildkite.com/ead4486004439bfee871822ed4408d6c1f2f684f08a851ca5d.svg)](https://buildkite.com/rokt/android-webviewsdk)
 
 ## Requirements
 
@@ -54,22 +52,9 @@ or Local Unit test cases can also be executed using fastlane
 All the dependencies for sdk are listed in roktwebviewsdk/build.gradle. To add/update the dependencies modify the config.gradle first and then
 update in build.gradle.
 
-## CI/CD System
-
-The CI system used is **Buildkite**  https://buildkite.com/rokt/android-sdk-build
-Buildkite pipelines are defined in the `.buildkite` directory. There are two seperate lanes that are executed based on branch names.
-Branches with **release-** prefix are considered production branches, the publish step will release to the production maven respository.
-All other branches are considered alpha branches, so it will publish to maven with with **-alpha** postfix.
-It uses **docker** container for executing the build steps using the **Fastlane** build tool. The steps are configured in the `fastlane/Fastfile`
-
 ## Demo
 
 ![Demo](/assets/demo.gif)
-
-## Publishing
-We publish our library to Jitpack which requires us to have code in github. To create a release, in Github click on create a new release.
-Releases will determine the version of our library. Click on Choose a tag and enter your initial version of the library and click Enter. 
-Also, enter the title of release and a description of the library. Finally, click on Publish release to publish.
 
 ### How to publish locally
 Use below gradle commands to publish the library to ($HOME/.m2/repository)
@@ -129,7 +114,3 @@ myWebView.loadUrl("https://www.rokt.com")
 ```
 WebView myWebView = (RoktWebView) findViewById(R.id.webview);
 myWebView.loadUrl("https://www.rokt.com");
-```
-
-### License
-Please see [LICENSE](/LICENSE.md)
