@@ -1,6 +1,6 @@
 # RoktWebViewSDK Android
 
-**Please note:** This repository is currently unmaintained by a team of developers at Rokt. The repository is here and you can use it as an example only. However please be aware that we are not going to be updating issues or pull requests on this repository.
+**Please note:** This repository is currently unmaintained by a team of developers at Rokt. The repository is here and you can use it as an example only. However please be aware that we are not going to be updating issues or pull requests on this repository for the time being. We may resume development in the future at which point we will review the code, update dependencies, and conduct any modernization.
 
 An alternative approach to integration would be utilising the [Rokt Web SDK](https://docs.rokt.com/developers/integration-guides/web/overview) and utilising the launcher option [overrideLinkNavigation](https://docs.rokt.com/developers/integration-guides/web/library/integration-launcher-options/#override-link-navigation). 
 
